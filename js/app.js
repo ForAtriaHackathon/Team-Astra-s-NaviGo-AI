@@ -114,24 +114,44 @@ function renderWizardService(data) {
 
     // Step 1: Recommendation
     document.getElementById('wizard-service-title').textContent = data.recommended_service;
+    const descEl = document.getElementById('wizard-service-desc');
+    if (descEl) {
+        descEl.textContent = data.description || 'Official government service registration.';
+    }
 
     // Step 2: Eligibility
     const eligList = document.getElementById('wizard-eligibility');
     eligList.innerHTML = '';
-    const li = document.createElement('li');
-    li.textContent = data.eligibility_status;
-    eligList.appendChild(li);
+    if (data.eligibility_criteria && Array.isArray(data.eligibility_criteria)) {
+        data.eligibility_criteria.forEach(criterion => {
+            const li = document.createElement('li');
+            li.textContent = criterion;
+            eligList.appendChild(li);
+        });
+    } else {
+        const li = document.createElement('li');
+        li.textContent = data.eligibility_status;
+        eligList.appendChild(li);
+    }
 
     // Step 3: Documents
     const docWrapper = document.getElementById('wizard-documents');
     docWrapper.innerHTML = '';
     data.required_documents.forEach((doc, idx) => {
         const docName = typeof doc === 'string' ? doc : doc.name;
+        let displayName = docName;
+        let displayDesc = "";
+        if (docName.includes(":")) {
+            const parts = docName.split(":");
+            displayName = parts[0].trim();
+            displayDesc = parts.slice(1).join(":").trim();
+        }
         docWrapper.innerHTML += `
-            <div class="checklist-item">
-                <input type="checkbox" id="wizard_doc_${idx}">
-                <label for="wizard_doc_${idx}">
-                    <strong>${docName}</strong>
+            <div class="checklist-item" style="align-items: flex-start; margin-bottom: 12px;">
+                <input type="checkbox" id="wizard_doc_${idx}" style="margin-top: 4px;">
+                <label for="wizard_doc_${idx}" style="margin-left: 8px; font-weight: normal; cursor: pointer;">
+                    <strong>${displayName}</strong>
+                    ${displayDesc ? `<br><span class="text-sm text-muted" style="display: block; margin-top: 4px; font-weight: 400; line-height: 1.4;">${displayDesc}</span>` : ''}
                 </label>
             </div>
         `;
