@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NaviGo - India's AI Citizen Journey Agent</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo" onclick="navigateTo('landing')">
+            <div class="logo-icon"><i class="fa-solid fa-compass"></i></div>
+            <span>NaviGo</span>
+        </div>
+        <div class="nav-actions">
+            <div class="lang-selector">
+                <i class="fa-solid fa-language"></i>
+                <select id="language-switcher" onchange="changeLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="kn">ಕನ್ನಡ</option>
+                    <option value="te">తెలుగు</option>
+                </select>
+            </div>
+            <button class="btn-outline" onclick="navigateTo('dashboard')" data-i18n="nav_dashboard">My Dashboard</button>
+        </div>
+    </header>
+
+    <main id="app-container">
+        <!-- 1. Landing Page -->
+        <section id="view-landing" class="view active">
+            <div class="hero">
+                <div class="hero-content">
+                    <div class="pill">India's AI Citizen Journey Agent</div>
+                    <h1 data-i18n="hero_title">Find the right government service in seconds.</h1>
+                    <p data-i18n="hero_subtitle">NaviGo replaces confusion with clear action. We help you discover, understand, and apply for government schemes with step-by-step guidance.</p>
+                    <div class="hero-actions">
+                        <button class="btn-primary large" onclick="navigateTo('dashboard')">
+                            <span data-i18n="btn_start_journey">Start Your Journey</span> <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="features-wrapper">
+                <div class="features container">
+                    <div class="feature-card">
+                        <div class="icon-wrapper blue"><i class="fa-solid fa-list-check"></i></div>
+                        <h3 data-i18n="feat_eligibility_title">Eligibility & Documents</h3>
+                        <p data-i18n="feat_eligibility_desc">Get instant eligibility checks and personalized document checklists.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon-wrapper green"><i class="fa-solid fa-language"></i></div>
+                        <h3 data-i18n="feat_language_title">In Your Language</h3>
+                        <p data-i18n="feat_language_desc">Ask questions in English, Hindi, Kannada, or Telugu.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon-wrapper purple"><i class="fa-solid fa-route"></i></div>
+                        <h3 data-i18n="feat_plans_title">Clear Action Plans</h3>
+                        <p data-i18n="feat_plans_desc">Turn bureaucratic confusion into a simple, step-by-step roadmap.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Main Dashboard -->
+        <section id="view-dashboard" class="view hidden">
+            <div class="container">
+                <div class="greeting">
+                    <h2 data-i18n="db_title">How can we help you today?</h2>
+                    <p data-i18n="db_subtitle">Describe your goal in your own words.</p>
+                </div>
+                
+                <div class="search-box">
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-sparkles text-muted"></i>
+                        <input type="text" id="prompt-input" placeholder="E.g., I want to start a food business..." onkeypress="handleEnter(event)" data-i18n="db_input_placeholder">
+                    </div>
+                    <div class="search-actions">
+                        <button class="btn-icon" onclick="startDocumentAnalysis()" title="Upload Rejection Letter or Document">
+                            <i class="fa-solid fa-paperclip"></i>
+                        </button>
+                        <button class="btn-primary" onclick="handleSearch()">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="dashboard-loading" class="hidden loading-state mt-4">
+                    <div class="spinner"></div>
+                    <p>AI is matching you with the right services...</p>
+                </div>
+
+                <div class="suggestions mt-5" id="dashboard-content">
+                    <div class="section-header">
+                        <h3><i class="fa-solid fa-lightbulb text-yellow"></i> <span data-i18n="db_common_goals">Common Citizen Goals</span></h3>
+                    </div>
+                    <div class="service-grid">
+                        <div class="service-card" onclick="loadService('fssai')">
+                            <div class="card-icon"><i class="fa-solid fa-utensils"></i></div>
+                            <h4 data-i18n="db_food_title">Start a Food Business</h4>
+                            <p data-i18n="db_food_subtitle">FSSAI Registration & Licensing</p>
+                        </div>
+                        <div class="service-card" onclick="loadService('pmkisan')">
+                            <div class="card-icon"><i class="fa-solid fa-tractor"></i></div>
+                            <h4 data-i18n="db_farm_title">Farming Support</h4>
+                            <p data-i18n="db_farm_subtitle">PM-KISAN Subsidy</p>
+                        </div>
+                        <div class="service-card" onclick="loadService('nsp')">
+                            <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                            <h4 data-i18n="db_scholarship_title">Student Scholarships</h4>
+                            <p data-i18n="db_scholarship_subtitle">National Scholarship Portal</p>
+                        </div>
+                        <div class="service-card" onclick="loadService('udyam')">
+                            <div class="card-icon"><i class="fa-solid fa-store"></i></div>
+                            <h4 data-i18n="db_business_title">Register My Business</h4>
+                            <p data-i18n="db_business_subtitle">Udyam (MSME) Registration</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-journeys-card mt-5" onclick="navigateTo('tracker')">
+                    <div class="flex-between">
+                        <div>
+                            <h3 data-i18n="db_active_journeys">Your Active Journeys</h3>
+                            <p class="text-muted text-sm" data-i18n="db_active_journeys_sub">Resume where you left off</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Journey Wizard Screen -->
+        <section id="view-journey" class="view hidden">
+            <div class="container">
+                <button class="btn-text mb-3" onclick="navigateTo('dashboard')">
+                    <i class="fa-solid fa-times"></i> <span data-i18n="wiz_cancel">Cancel Journey</span>
+                </button>
+                
+                <!-- Stepper Progress -->
+                <div class="wizard-stepper mb-4">
+                    <div class="step active" id="step-nav-1"><div class="step-num">1</div><div class="step-label" data-i18n="wiz_step_service">Service</div></div>
+                    <div class="step-line"></div>
+                    <div class="step" id="step-nav-2"><div class="step-num">2</div><div class="step-label" data-i18n="wiz_step_eligibility">Eligibility</div></div>
+                    <div class="step-line"></div>
+                    <div class="step" id="step-nav-3"><div class="step-num">3</div><div class="step-label" data-i18n="wiz_step_documents">Documents</div></div>
+                    <div class="step-line"></div>
+                    <div class="step" id="step-nav-4"><div class="step-num">4</div><div class="step-label" data-i18n="wiz_step_plan">Plan</div></div>
+                    <div class="step-line"></div>
+                    <div class="step" id="step-nav-5"><div class="step-num">5</div><div class="step-label" data-i18n="wiz_step_analyze">Analyze</div></div>
+                </div>
+
+                <!-- Wizard Content -->
+                <div class="wizard-content">
+                    
+                    <!-- Step 1: Recommendation -->
+                    <div class="wizard-step active-step" id="wizard-step-1">
+                        <div class="info-card text-center">
+                            <div class="icon-wrapper blue"><i class="fa-solid fa-bullseye"></i></div>
+                            <h2 class="mb-2" id="wizard-service-title">Service Name</h2>
+                            <p class="badge success mb-3"><i class="fa-solid fa-check-circle"></i> High Match based on your goal</p>
+                            <p id="wizard-service-desc" class="text-muted mb-4">Service Description.</p>
+                            <button class="btn-primary large mt-3" onclick="nextStep(2)">Proceed to Eligibility <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Eligibility -->
+                    <div class="wizard-step hidden-step" id="wizard-step-2">
+                        <div class="info-card">
+                            <h3 class="card-title text-center"><i class="fa-solid fa-clipboard-check text-blue"></i> <span data-i18n="wiz_elig_title">Am I Eligible?</span></h3>
+                            <p class="text-muted text-center mb-4" data-i18n="wiz_elig_subtitle">Here are the criteria you need to meet for this service.</p>
+                            <ul id="wizard-eligibility" class="styled-list mb-4">
+                                <!-- JS injected -->
+                            </ul>
+                            <div class="flex-between mt-4">
+                                <button class="btn-outline" onclick="prevStep(1)"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></button>
+                                <button class="btn-primary" onclick="nextStep(3)"><span data-i18n="wiz_meet_criteria">I Meet These Criteria</span> <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Documents -->
+                    <div class="wizard-step hidden-step" id="wizard-step-3">
+                        <div class="info-card">
+                            <h3 class="card-title text-center"><i class="fa-solid fa-folder-open text-orange"></i> <span data-i18n="wiz_docs_title">Required Documents</span></h3>
+                            <p class="text-muted text-center mb-4" data-i18n="wiz_docs_subtitle">Gather these documents before you start the application.</p>
+                            <div class="checklist-wrapper mb-4" id="wizard-documents">
+                                <!-- JS injected -->
+                            </div>
+                            <div class="flex-between mt-4">
+                                <button class="btn-outline" onclick="prevStep(2)"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></button>
+                                <button class="btn-primary" onclick="nextStep(4)"><span data-i18n="wiz_view_plan">View Action Plan</span> <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Action Plan -->
+                    <div class="wizard-step hidden-step" id="wizard-step-4">
+                        <div class="info-card highlight-card">
+                            <h3 class="card-title text-center"><i class="fa-solid fa-list-ol text-purple"></i> <span data-i18n="wiz_plan_title">Your Action Plan</span></h3>
+                            <div class="timeline mt-4" id="wizard-timeline">
+                                <!-- JS injected -->
+                            </div>
+                            <div class="flex-between mt-4">
+                                <button class="btn-outline" onclick="prevStep(3)"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></button>
+                                <button class="btn-primary" onclick="nextStep(5)"><span data-i18n="wiz_next_analyze">Next: Analyze Documents</span> <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Document Analysis -->
+                    <div class="wizard-step hidden-step" id="wizard-step-5">
+                        <div class="info-card">
+                            <h3 class="card-title text-center"><i class="fa-solid fa-robot text-blue"></i> <span data-i18n="wiz_upload_title">AI Document Check</span></h3>
+                            <p class="text-muted text-center mb-4" data-i18n="wiz_upload_subtitle">Have a rejection letter or blurry document? Upload it to let AI verify it before you apply.</p>
+                            
+                            <div class="upload-zone" id="wizard-upload-zone" onclick="document.getElementById('wizard-file-input').click()">
+                                <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                                <h3 data-i18n="wiz_upload_click">Click to upload</h3>
+                                <p class="text-sm text-muted" data-i18n="wiz_upload_formats">Supports PDF, PNG, JPG</p>
+                                <input type="file" id="wizard-file-input" hidden onchange="handleWizardFileUpload(event)">
+                            </div>
+
+                            <div id="wizard-analysis-loading" class="hidden loading-state mt-4">
+                                <div class="spinner"></div>
+                                <p>AI is analyzing...</p>
+                            </div>
+
+                            <div id="wizard-analysis-result" class="hidden mt-4">
+                                <div class="border-red mb-3 p-3 bg-light rounded">
+                                    <h4 class="text-red mb-2"><i class="fa-solid fa-triangle-exclamation"></i> Issue Detected</h4>
+                                    <p id="wizard-analysis-issue"></p>
+                                </div>
+                                <div class="border-green p-3 bg-light rounded mb-4">
+                                    <h4 class="text-green mb-2"><i class="fa-solid fa-lightbulb"></i> Next Steps</h4>
+                                    <ul class="styled-list" id="wizard-analysis-steps"></ul>
+                                </div>
+                            </div>
+
+                            <div class="flex-between mt-4">
+                                <button class="btn-outline" onclick="prevStep(4)"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="btn_back">Back</span></button>
+                                <button class="btn-primary large bg-green" onclick="completeJourney()"><i class="fa-regular fa-bookmark"></i> <span data-i18n="wiz_complete">Save Journey & Finish</span></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Journey Tracker Screen -->
+        <section id="view-tracker" class="view hidden">
+            <div class="container">
+                <button class="btn-text mb-3" onclick="navigateTo('dashboard')">
+                    <i class="fa-solid fa-arrow-left"></i> <span data-i18n="track_back">Back to Dashboard</span>
+                </button>
+                <h2 data-i18n="track_title">My Active Journeys</h2>
+                <p class="text-muted mb-4" data-i18n="track_subtitle">Track your progress and pick up right where you left off.</p>
+                
+                <div class="journeys-list" id="journeys-list">
+                    <!-- Populated by JS -->
+                </div>
+                <div id="no-journeys" class="hidden text-center mt-5 text-muted">
+                    <i class="fa-solid fa-box-open fa-3x mb-3"></i>
+                    <p data-i18n="track_empty">No saved journeys yet.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/mockData.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
