@@ -62,7 +62,7 @@ async function handleSearch() {
         renderWizardService(data);
     } catch (error) {
         console.error('Error fetching from backend:', error);
-        alert("Failed to connect to the AI Backend. Ensure the server is running on localhost:8000.");
+        alert("Failed to connect to the AI Backend. Please try again later.");
         
         // Revert UI
         document.getElementById('dashboard-loading').classList.add('hidden');
