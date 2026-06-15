@@ -2,6 +2,7 @@ import os
 import json
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import google.generativeai as genai
 
@@ -581,6 +582,9 @@ def analyze_document(file: UploadFile = File(...), lang: str = "en"):
     if lang != "en":
         payload = translate_payload(payload, lang)
     return payload
+
+frontend_dir = os.path.join(os.path.dirname(__file__), "..")
+app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="static")
 
 if __name__ == "__main__":
     import uvicorn
