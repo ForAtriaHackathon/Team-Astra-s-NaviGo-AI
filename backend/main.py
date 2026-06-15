@@ -586,6 +586,7 @@ def analyze_document(file: UploadFile = File(...), lang: str = "en"):
 frontend_dir = os.path.join(os.path.dirname(__file__), "..")
 app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="static")
 
+# Trigger auto-deploy on Render
 if __name__ == "__main__":
     import uvicorn
     print("Starting NaviGo AI Layer Backend...")
