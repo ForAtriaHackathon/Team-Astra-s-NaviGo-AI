@@ -44,7 +44,7 @@ async function handleSearch() {
     try {
         const currentLang = document.getElementById('language-switcher')?.value || 'en';
         // Send natural language query to the AI Backend
-        const response = await fetch('http://localhost:8000/api/chat', {
+        const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query: input, lang: currentLang })
@@ -242,7 +242,7 @@ async function handleWizardFileUpload(event) {
 
     try {
         const currentLang = document.getElementById('language-switcher')?.value || 'en';
-        const response = await fetch(`http://localhost:8000/api/analyze_document?lang=${currentLang}`, {
+        const response = await fetch(`/api/analyze_document?lang=${currentLang}`, {
             method: 'POST',
             body: formData
         });
